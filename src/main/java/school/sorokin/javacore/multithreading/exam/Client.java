@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Client {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
        DataProcessor dataProcessor = new DataProcessor();
 
         for (int i = 0; i < 100; i++) {
@@ -13,6 +13,7 @@ public class Client {
         }
 
         while (dataProcessor.getCountOfTask() != 0){
+            Thread.sleep(100);
             System.out.println("Количество исполняемых задач: " + dataProcessor.getCountOfTask());
         }
 

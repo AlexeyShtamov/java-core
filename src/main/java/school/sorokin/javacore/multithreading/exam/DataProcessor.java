@@ -14,7 +14,7 @@ public class DataProcessor {
     private final Map<String, Integer> results = new HashMap<>();
 
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public void calculateSumTask(List<Integer> nums){
         String taskName = "task" + countOfTasks.incrementAndGet();
