@@ -45,6 +45,11 @@ public class ContactSystem {
 
 
     public void addContact(Scanner scanner){
+        if (names.length <= count + 1){
+            System.out.println("Нет места для добавления нового контакта");
+            return;
+        }
+
         System.out.print("\nДобавление контакта\n");
         System.out.print("Введите имя: ");
         String name = scanner.nextLine();
@@ -62,7 +67,7 @@ public class ContactSystem {
     public void viewAllContacts(){
         System.out.print("\nПросмотр контакта\n");
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < this.names.length; i++) {
             if(names[i] != null)
                 System.out.printf("Имя: %s. Номер телефона: %s\n", this.names[i], this.phoneNumbers[i]);
         }
@@ -107,6 +112,7 @@ public class ContactSystem {
         if (isFound){
             names[names.length - 1] = null;
             phoneNumbers[phoneNumbers.length - 1] = null;
+            count--;
         } else System.out.println("\nНет номера с таким именем");
     }
 
