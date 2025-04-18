@@ -14,7 +14,7 @@ public class DataProcessor {
     private final Map<String, Integer> results = new HashMap<>();
 
 
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     public void calculateSumTask(List<Integer> nums){
         String taskName = "task" + countOfTasks.incrementAndGet();
@@ -23,12 +23,13 @@ public class DataProcessor {
         CompletableFuture<Integer> cf = CompletableFuture.supplyAsync(() ->
         {
             try {
-                activeTasks.getAndIncrement();
-                return executorService.submit(new CalculateSumTask(taskName, nums)).get();
-            } catch (InterruptedException | ExecutionException e) {
+
+                return new CalculateSumTask(taskName, nums).call();
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        });
+        }, executorService);
+        activeTasks.getAndIncrement();
 
         cf.thenAccept(num -> {
             synchronized (results){
@@ -46,8 +47,7 @@ public class DataProcessor {
 
     public Optional<Integer> getResultByTaskName(String taskName){
         synchronized (results){
-            if (results.containsKey(taskName)) return Optional.of(results.get(taskName));
-            return Optional.empty();
+            return Optional.ofNullable(results.get(taskName));
         }
     }
 
