@@ -1,5 +1,7 @@
 package school.sorokin.javacore.stream_api;
 
+import school.sorokin.javacore.oop.exam.Book;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -8,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 public class Main {
 
@@ -80,32 +84,22 @@ public class Main {
                 .average().getAsDouble();
 
         // Задание 10
-        double bookSum = customers.stream()
+
+        List<Double> bookPrices = customers.stream()
                 .flatMap(e -> e.getOrders().stream())
                 .flatMap(e -> e.getProducts().stream())
                 .filter(e -> e.getCategory().equals("Books"))
-                .mapToDouble(e -> e.getPrice().doubleValue())
+                .mapToDouble(e -> e.getPrice().doubleValue()).boxed().toList();
+
+        double bookSum = bookPrices.stream().mapToDouble(e -> e)
                 .sum();
 
-        double bookAverage = customers.stream()
-                .flatMap(e -> e.getOrders().stream())
-                .flatMap(e -> e.getProducts().stream())
-                .filter(e -> e.getCategory().equals("Toys"))
-                .mapToDouble(e -> e.getPrice().doubleValue())
-                .average().getAsDouble();
+        double bookAverage = bookPrices.stream().mapToDouble(e -> e).average().getAsDouble();
 
-        double bookMin = customers.stream()
-                .flatMap(e -> e.getOrders().stream())
-                .flatMap(e -> e.getProducts().stream())
-                .filter(e -> e.getCategory().equals("Toys"))
-                .mapToDouble(e -> e.getPrice().doubleValue())
+        double bookMin = bookPrices.stream().mapToDouble(e -> e)
                 .min().getAsDouble();
 
-        double bookMax = customers.stream()
-                .flatMap(e -> e.getOrders().stream())
-                .flatMap(e -> e.getProducts().stream())
-                .filter(e -> e.getCategory().equals("Toys"))
-                .mapToDouble(e -> e.getPrice().doubleValue())
+        double bookMax = bookPrices.stream().mapToDouble(e -> e)
                 .max().getAsDouble();
 
         // Задание 11
